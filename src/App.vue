@@ -7,7 +7,7 @@
           <!-- v-toolbar-side-icon class="hidden-md-and-up"></v-toolbar-side-icon -->
           <v-toolbar-items>
               <v-btn flat>
-                  <v-icon>supervisor_account</v-icon>
+                  <v-icon left>supervisor_account</v-icon>
                   Voir les Meetups
               </v-btn>
           </v-toolbar-items>
