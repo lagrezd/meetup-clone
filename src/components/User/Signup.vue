@@ -4,12 +4,12 @@
             <v-flex x12 sm6 offset-sm3>
                 <v-card-text>
                     <v-container>
-                        <form>
+                        <form @submit.prevent="onSignup">
                             <v-layout row>
                                 <v-flex xs12>
                                     <v-text-field
                                         name="email"
-                                        label="email"
+                                        label="Mail"
                                         id="email"
                                         v-model="email"
                                         type="email"
@@ -20,7 +20,7 @@
                                 <v-flex xs12>
                                     <v-text-field
                                             name="password"
-                                            label="Password"
+                                            label="Mot de passe"
                                             id="password"
                                             v-model="password"
                                             type="password"
@@ -53,7 +53,7 @@
 
 <script>
     export default {
-      name: 'signin',
+      name: 'signup',
       data () {
         return {
           email: '',
@@ -64,12 +64,25 @@
       computed: {
         comparePasswords () {
           return this.password !== this.confirmPassword ? 'Mauvais mot de passe' : ''
+        },
+        user () {
+          return this.$store.getters.user
+        }
+      },
+      watch: {
+        user (value) {
+          if (value !== null && value !== undefined) {
+            this.$router.push('/')
+          }
         }
       },
       methods: {
         onSignup () {
           // Vuex
-          console.log({email: this.email, password: this.password, confirmPassword: this.confirmPassword})
+          this.$store.dispatch('signUserUp', {
+            email: this.email,
+            password: this.password
+          })
         }
       }
     }
