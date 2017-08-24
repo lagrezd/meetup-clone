@@ -29,6 +29,9 @@ export const store = new Vuex.Store({
     error: null
   },
   mutations: {
+    setLoadedMeetups (state, payload) {
+      state.loadedMeetups = payload
+    },
     createMeetup (state, payload) {
       state.loadedMeetups.push(payload)
     },
@@ -46,17 +49,54 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    loadMeetups ({ commit }) {
+      commit('setLoading', true)
+      firebase.database().ref('meetups').once('value')
+        .then(
+          (data) => {
+            const meetups = []
+            const obj = data.val()
+            for (let key in obj) {
+              meetups.push({
+                id: key,
+                title: obj[key].title,
+                description: obj[key].description,
+                imageUrl: obj[key].imageUrl,
+                date: obj[key].date
+              })
+            }
+            commit('setLoadedMeetups', meetups)
+            commit('setLoading', false)
+          }
+        )
+        .catch(
+          (error) => {
+            console.log(error)
+            commit('setLoading', true)
+          }
+        )
+    },
     createMeetup ({ commit }, payload) {
       const meetup = {
         titre: payload.titre,
         lieu: payload.lieu,
         imageUrl: payload.imageUrl,
         description: payload.description,
-        date: payload.date,
-        id: 'kfdojestjfsgcrtcre'
+        date: payload.date.toISOString()
       }
-      // Envoyer les donnée à Firebase et les enregister
-      commit('createMeetup', meetup) // appel de la mutation pour créer un tableau
+      firebase.database().ref('meetups').push(meetup)
+        .then((data) => {
+          const key = data.key
+          // Envoyer les donnée à Firebase et les enregister
+          // commit('createMeetup', meetup) // appel de la mutation pour créer un tableau
+          commit('createMeetup', {
+            ...meetup,
+            id: key
+          }) // appel de la mutation pour créer un tableau
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
     signUserUp ({ commit }, payload) {
       commit('setLoading', true)
