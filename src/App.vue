@@ -11,6 +11,14 @@
                 </v-list-tile-action>
                 <v-list-tile-content>{{ item.title }}</v-list-tile-content>
             </v-list-tile>
+            <v-list-tile
+                v-if="userIsAuthenticated"
+                @click="onLogout">
+                <v-list-tile-action>
+                    <v-icon>exit_to_app</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>Se déconnecter</v-list-tile-content>
+            </v-list-tile>
         </v-list>
       </v-navigation-drawer>
       <v-toolbar dark class="primary">
@@ -30,6 +38,13 @@
                   :to="item.link">
                   <v-icon left dark>{{ item.icon }}</v-icon>
                   {{ item.title }}
+              </v-btn>
+              <v-btn
+                  flat
+                  v-if="userIsAuthenticated"
+                  @click="onLogout">
+                  <v-icon left dark>exit_to_app</v-icon>
+                  Se déconnecter
               </v-btn>
           </v-toolbar-items>
       </v-toolbar>
@@ -52,7 +67,7 @@
           {icon: 'face', title: 'Créer un compte', link: '/signup'},
           {icon: 'lock_open', title: 'Se connecter', link: '/signin'}
         ]
-        if (this.userAuthenticated) {
+        if (this.userIsAuthenticated) {
           menuItems = [
             {icon: 'supervisor_account', title: 'Voir les Meetups', link: '/meetups'},
             {icon: 'room', title: 'Créer un Meetup', link: '/meetup/new'},
@@ -61,8 +76,13 @@
         }
         return menuItems
       },
-      userAuthenticated () {
+      userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+      }
+    },
+    methods: {
+      onLogout () {
+        this.$store.dispatch('logout')
       }
     }
   }
