@@ -11,10 +11,10 @@
                     <v-layout row>
                         <v-flex xs12 sm6 offset-sm3>
                             <v-text-field
-                                name="titre"
+                                name="titLe"
                                 label="Titre"
-                                id="titre"
-                                v-model="titre"
+                                id="title"
+                                v-model="title"
                                 required
                                 autofocus>
                             </v-text-field>
@@ -23,10 +23,10 @@
                     <v-layout row>
                         <v-flex xs12 sm6 offset-sm3>
                             <v-text-field
-                                    name="lieu"
-                                    label="Lieu"
-                                    id="lieu"
-                                    v-model="lieu"
+                                    name="location"
+                                    label="Location"
+                                    id="location"
+                                    v-model="location"
                                     required>
                             </v-text-field>
                         </v-flex>
@@ -102,8 +102,8 @@
       name: 'create-meetup',
       data () {
         return {
-          titre: '',
-          lieu: '',
+          title: '',
+          location: '',
           imageUrl: '',
           description: '',
           date: new Date(),
@@ -113,7 +113,7 @@
       },
       computed: {
         formIsValid () {
-          return this.titre !== '' && this.lieu !== '' && this.imageUrl !== '' && this.description !== ''
+          return this.title !== '' && this.location !== '' && this.imageUrl !== '' && this.description !== ''
         },
         submittableDateTime () {
           const date = new Date(this.date)
@@ -138,8 +138,8 @@
             return
           }
           const meetupData = {
-            titre: this.titre,
-            lieu: this.lieu,
+            title: this.title,
+            location: this.location,
             image: this.image,
             description: this.description,
             date: this.submittableDateTime
